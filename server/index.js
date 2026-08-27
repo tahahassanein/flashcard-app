@@ -1,14 +1,14 @@
 require('dotenv').config();
 const express = require('express');
-const { Pool } = require('pg');
+const cors = require('cors');
+const pool = require('./src/db/pool');
+const authRoutes = require('./src/routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+app.use(cors());
+app.use(express.json());
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
@@ -19,10 +19,11 @@ app.get('/db-check', async (req, res) => {
     const result = await pool.query('SELECT NOW()');
     res.json({ dbTime: result.rows[0].now });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: 'Database connection failed' });
   }
 });
+
+app.use('/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
