@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./src/db/pool');
 const authRoutes = require('./src/routes/authRoutes');
+const decksRoutes = require('./src/routes/decksRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.get('/db-check', async (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/decks', decksRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
