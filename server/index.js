@@ -4,6 +4,7 @@ const cors = require('cors');
 const pool = require('./src/db/pool');
 const authRoutes = require('./src/routes/authRoutes');
 const decksRoutes = require('./src/routes/decksRoutes');
+const cardsRoutes = require('./src/routes/cardsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.get('/db-check', async (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/decks', decksRoutes);
+app.use('/decks/:deckId/cards', cardsRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
