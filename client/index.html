@@ -20,9 +20,15 @@
   </div>
 
   <div id="app-screen" style="display: none;">
-    <h1>Your Decks</h1>
-    <p>Logged in</p>
-    <button id="logout-btn">Log Out</button>
+      <h1>Your Decks</h1>
+      <button id="logout-btn">Log Out</button>
+
+      <div id="new-deck-form">
+            <input type="text" id="deck-name-input" placeholder="New deck name">
+            <button id="create-deck-btn">Create Deck</button>
+      </div>
+
+      <ul id="decks-list"></ul>
   </div>
 
   <script src="app.js"></script>
