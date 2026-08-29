@@ -1,36 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Flashcard App</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Flashcard App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <div id="auth-screen">
-    <h1>Flashcard App</h1>
+    <div id="auth-screen">
+        <h1>Flashcard App</h1>
 
-    <div id="auth-form">
-      <input type="email" id="email-input" placeholder="Email">
-      <input type="password" id="password-input" placeholder="Password">
-      <button id="login-btn">Log In</button>
-      <button id="register-btn">Register</button>
-      <p id="auth-error"></p>
+        <div id="auth-form">
+            <input type="email" id="email-input" placeholder="Email">
+            <input type="password" id="password-input" placeholder="Password">
+            <button id="login-btn">Log In</button>
+            <button id="register-btn">Register</button>
+            <p id="auth-error"></p>
+        </div>
     </div>
-  </div>
 
-  <div id="app-screen" style="display: none;">
-      <h1>Your Decks</h1>
-      <button id="logout-btn">Log Out</button>
+    <div id="app-screen" style="display: none;">
+        <h1>Your Decks</h1>
+        <button id="logout-btn">Log Out</button>
 
-      <div id="new-deck-form">
+        <div id="new-deck-form">
             <input type="text" id="deck-name-input" placeholder="New deck name">
             <button id="create-deck-btn">Create Deck</button>
-      </div>
+        </div>
 
-      <ul id="decks-list"></ul>
-  </div>
+        <ul id="decks-list"></ul>
+    </div>
 
-  <script src="app.js"></script>
+    <div id="deck-screen" style="display: none;">
+        <button id="back-to-decks-btn">← Back to Decks</button>
+        <h1 id="deck-screen-title"></h1>
+
+        <div id="new-card-form">
+            <input type="text" id="card-question-input" placeholder="Question">
+            <input type="text" id="card-answer-input" placeholder="Answer">
+            <button id="create-card-btn">Add Card</button>
+        </div>
+
+        <ul id="cards-list"></ul>
+    </div>
+
+    <script src="app.js"></script>
 </body>
+
 </html>
