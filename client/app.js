@@ -65,38 +65,45 @@ const deckNameInput = document.getElementById('deck-name-input');
 document.getElementById('create-deck-btn').addEventListener('click', createDeck);
 
 async function loadDecks() {
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
+  decksList.innerHTML = '<li>Loading...</li>';
 
-    try {
-        const response = await fetch(`${API_URL}/decks`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const decks = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/decks`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const decks = await response.json();
 
-        decksList.innerHTML = '';
+    decksList.innerHTML = '';
 
-        decks.forEach(deck => {
-            const li = document.createElement('li');
-
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = deck.name;
-            nameSpan.style.cursor = 'pointer';
-            nameSpan.addEventListener('click', () => openDeck(deck.id, deck.name));
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Delete';
-            deleteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                deleteDeck(deck.id);
-            });
-
-            li.appendChild(nameSpan);
-            li.appendChild(deleteBtn);
-            decksList.appendChild(li);
-        });
-    } catch (err) {
-        console.error('Failed to load decks', err);
+    if (decks.length === 0) {
+      decksList.innerHTML = '<li>No decks yet — create one below</li>';
+      return;
     }
+
+    decks.forEach(deck => {
+      const li = document.createElement('li');
+
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = deck.name;
+      nameSpan.style.cursor = 'pointer';
+      nameSpan.addEventListener('click', () => openDeck(deck.id, deck.name));
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteDeck(deck.id);
+      });
+
+      li.appendChild(nameSpan);
+      li.appendChild(deleteBtn);
+      decksList.appendChild(li);
+    });
+  } catch (err) {
+    decksList.innerHTML = '<li>Failed to load decks. Try refreshing.</li>';
+    console.error(err);
+  }
 }
 
 async function createDeck() {
@@ -161,6 +168,7 @@ function openDeck(deckId, deckName) {
 
 async function loadCards() {
   const token = localStorage.getItem('token');
+  cardsList.innerHTML = '<li>Loading...</li>';
 
   try {
     const response = await fetch(`${API_URL}/decks/${currentDeckId}/cards`, {
@@ -169,6 +177,11 @@ async function loadCards() {
     const cards = await response.json();
 
     cardsList.innerHTML = '';
+
+    if (cards.length === 0) {
+      cardsList.innerHTML = '<li>No cards yet — add one below</li>';
+      return;
+    }
 
     cards.forEach(card => {
       const li = document.createElement('li');
@@ -185,7 +198,8 @@ async function loadCards() {
       cardsList.appendChild(li);
     });
   } catch (err) {
-    console.error('Failed to load cards', err);
+    cardsList.innerHTML = '<li>Failed to load cards. Try refreshing.</li>';
+    console.error(err);
   }
 }
 
@@ -257,19 +271,26 @@ ratingButtons.addEventListener('click', (e) => {
 async function startReview() {
   const token = localStorage.getItem('token');
 
+  appScreen.style.display = 'none';
+  reviewScreen.style.display = 'block';
+  reviewQuestion.textContent = 'Loading...';
+  reviewCardArea.style.display = 'block';
+  reviewDone.style.display = 'none';
+  revealBtn.style.display = 'none';
+  ratingButtons.style.display = 'none';
+  reviewAnswer.style.display = 'none';
+  reviewProgress.textContent = '';
+
   try {
     const response = await fetch(`${API_URL}/review/queue`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     reviewQueue = await response.json();
     currentCardIndex = 0;
-
-    appScreen.style.display = 'none';
-    reviewScreen.style.display = 'block';
-
     showCurrentCard();
   } catch (err) {
-    console.error('Failed to load review queue', err);
+    reviewQuestion.textContent = 'Failed to load. Please try again.';
+    console.error(err);
   }
 }
 
