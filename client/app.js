@@ -228,3 +228,94 @@ async function deleteCard(cardId) {
     console.error('Failed to delete card', err);
   }
 }
+
+const reviewScreen = document.getElementById('review-screen');
+const reviewProgress = document.getElementById('review-progress');
+const reviewQuestion = document.getElementById('review-question');
+const reviewAnswer = document.getElementById('review-answer');
+const revealBtn = document.getElementById('reveal-answer-btn');
+const ratingButtons = document.getElementById('rating-buttons');
+const reviewCardArea = document.getElementById('review-card-area');
+const reviewDone = document.getElementById('review-done');
+
+let reviewQueue = [];
+let currentCardIndex = 0;
+
+document.getElementById('start-review-btn').addEventListener('click', startReview);
+document.getElementById('back-from-review-btn').addEventListener('click', () => {
+  reviewScreen.style.display = 'none';
+  appScreen.style.display = 'block';
+});
+revealBtn.addEventListener('click', revealAnswer);
+
+ratingButtons.addEventListener('click', (e) => {
+  if (e.target.dataset.quality === undefined) return;
+  const quality = parseInt(e.target.dataset.quality);
+  submitReview(quality);
+});
+
+async function startReview() {
+  const token = localStorage.getItem('token');
+
+  try {
+    const response = await fetch(`${API_URL}/review/queue`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    reviewQueue = await response.json();
+    currentCardIndex = 0;
+
+    appScreen.style.display = 'none';
+    reviewScreen.style.display = 'block';
+
+    showCurrentCard();
+  } catch (err) {
+    console.error('Failed to load review queue', err);
+  }
+}
+
+function showCurrentCard() {
+  if (currentCardIndex >= reviewQueue.length) {
+    reviewCardArea.style.display = 'none';
+    reviewDone.style.display = 'block';
+    return;
+  }
+
+  reviewCardArea.style.display = 'block';
+  reviewDone.style.display = 'none';
+
+  const card = reviewQueue[currentCardIndex];
+  reviewProgress.textContent = `Card ${currentCardIndex + 1} of ${reviewQueue.length}`;
+  reviewQuestion.textContent = card.question;
+  reviewAnswer.textContent = card.answer;
+
+  reviewAnswer.style.display = 'none';
+  revealBtn.style.display = 'block';
+  ratingButtons.style.display = 'none';
+}
+
+function revealAnswer() {
+  reviewAnswer.style.display = 'block';
+  revealBtn.style.display = 'none';
+  ratingButtons.style.display = 'flex';
+}
+
+async function submitReview(quality) {
+  const token = localStorage.getItem('token');
+  const card = reviewQueue[currentCardIndex];
+
+  try {
+    await fetch(`${API_URL}/review/${card.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ quality })
+    });
+
+    currentCardIndex++;
+    showCurrentCard();
+  } catch (err) {
+    console.error('Failed to submit review', err);
+  }
+}

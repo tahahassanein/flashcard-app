@@ -24,6 +24,7 @@
     <div id="app-screen" style="display: none;">
         <h1>Your Decks</h1>
         <button id="logout-btn">Log Out</button>
+        <button id="start-review-btn">Start Review</button>
 
         <div id="new-deck-form">
             <input type="text" id="deck-name-input" placeholder="New deck name">
@@ -44,6 +45,32 @@
         </div>
 
         <ul id="cards-list"></ul>
+    </div>
+
+    <div id="review-screen" style="display: none;">
+        <button id="back-from-review-btn">← Back to Decks</button>
+        <h1>Review</h1>
+
+        <div id="review-card-area">
+            <p id="review-progress"></p>
+            <div id="review-card">
+                <p id="review-question"></p>
+                <p id="review-answer" style="display: none;"></p>
+            </div>
+
+            <button id="reveal-answer-btn">Reveal Answer</button>
+
+            <div id="rating-buttons" style="display: none;">
+                <button data-quality="0">Again</button>
+                <button data-quality="3">Hard</button>
+                <button data-quality="4">Good</button>
+                <button data-quality="5">Easy</button>
+            </div>
+        </div>
+
+        <div id="review-done" style="display: none;">
+            <p>All done for today! 🎉</p>
+        </div>
     </div>
 
     <script src="app.js"></script>

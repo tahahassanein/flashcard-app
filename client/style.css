@@ -63,3 +63,37 @@ button:hover {
 #new-deck-form input {
   margin-bottom: 0;
 }
+
+#review-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  margin: 20px 0;
+  min-height: 100px;
+}
+
+#review-question {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#review-answer {
+  font-size: 18px;
+  color: #333;
+  margin-top: 15px;
+}
+
+#rating-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+#rating-buttons button {
+  flex: 1;
+}
+
+#rating-buttons button[data-quality="0"] { background: #c0392b; }
+#rating-buttons button[data-quality="3"] { background: #e67e22; }
+#rating-buttons button[data-quality="4"] { background: #86af2d; }
+#rating-buttons button[data-quality="5"] { background: #27ae60; }
