@@ -306,6 +306,10 @@ function showCurrentCard() {
 
   const card = reviewQueue[currentCardIndex];
   reviewProgress.textContent = `Card ${currentCardIndex + 1} of ${reviewQueue.length}`;
+
+  const progressPercent = (currentCardIndex / reviewQueue.length) * 100;
+  document.getElementById('progress-bar-fill').style.width = `${progressPercent}%`;
+
   reviewQuestion.textContent = card.question;
   reviewAnswer.textContent = card.answer;
 
